@@ -271,6 +271,7 @@ LIB_SOURCES =                                                   \
   utilities/persistent_cache/block_cache_tier_metadata.cc       \
   utilities/persistent_cache/persistent_cache_tier.cc           \
   utilities/persistent_cache/volatile_tier_impl.cc              \
+  utilities/rocketmq/rocketmq_compaction_filter.cc              \
   utilities/simulator_cache/cache_simulator.cc                  \
   utilities/simulator_cache/sim_cache.cc                        \
   utilities/table_properties_collectors/compact_on_deletion_collector.cc \
@@ -636,6 +637,7 @@ JNI_NATIVE_SOURCES =                                          \
   java/rocksjni/cassandra_compactionfilterjni.cc              \
   java/rocksjni/cassandra_value_operator.cc                   \
   java/rocksjni/restorejni.cc                                 \
+  java/rocksjni/rocketmq_compactionfilterjni.cc               \
   java/rocksjni/rocks_callback_object.cc                      \
   java/rocksjni/rocksjni.cc                                   \
   java/rocksjni/rocksdb_exception_test.cc                     \

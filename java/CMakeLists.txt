@@ -10,6 +10,7 @@ set(JNI_NATIVE_SOURCES
         rocksjni/backupablejni.cc
         rocksjni/backupenginejni.cc
         rocksjni/cassandra_compactionfilterjni.cc
+        rocksjni/rocketmq_compactionfilterjni.cc
         rocksjni/cassandra_value_operator.cc
         rocksjni/checkpoint.cc
         rocksjni/clock_cache.cc
@@ -204,6 +205,7 @@ set(JAVA_MAIN_CLASSES
   src/main/java/org/rocksdb/RemoveEmptyValueCompactionFilter.java
   src/main/java/org/rocksdb/RestoreOptions.java
   src/main/java/org/rocksdb/ReusedSynchronisationType.java
+  src/main/java/org/rocksdb/RocketMQIndexCompactionFilter.java
   src/main/java/org/rocksdb/RocksCallbackObject.java
   src/main/java/org/rocksdb/RocksDBException.java
   src/main/java/org/rocksdb/RocksDB.java
@@ -469,6 +471,7 @@ if(${CMAKE_VERSION} VERSION_LESS "3.11.4" OR (${Java_VERSION_MINOR} STREQUAL "7"
           org.rocksdb.ReadOptions
           org.rocksdb.RemoveEmptyValueCompactionFilter
           org.rocksdb.RestoreOptions
+          org.rocksdb.RocketMQIndexCompactionFilter
           org.rocksdb.RocksCallbackObject
           org.rocksdb.RocksDB
           org.rocksdb.RocksEnv
