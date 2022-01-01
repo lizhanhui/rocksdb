@@ -1,0 +1,332 @@
+licenses(["notice"])
+
+cc_library(
+    name = "api",
+    hdrs = glob(["include/rocksdb/**/*.h"]),
+    strip_include_prefix = "//include",
+    visibility = ["//visibility:public"],
+)
+
+cc_library(
+    name = "folly",
+    hdrs = glob(["third-party/folly/**/*.h"]),
+    srcs = glob(["third-party/folly/**/*.cpp"]),
+    strip_include_prefix = "//third-party/folly",
+    deps = [
+        "@com_google_googletest//:gtest",
+    ],
+    visibility = ["//visibility:public"],
+)
+
+cc_library(
+    name = "rocksdb",
+    hdrs = glob(["port/*.h"], exclude = ["port/port_posix.h"]) 
+    + select({
+        "@platforms//os:windows": glob(["port/win/*.h"]),
+        "//conditions:default": ["port/port_posix.h"],
+    })
+    + glob(["cache/*.h"])
+    + glob(["db/**/*.h"])
+    + glob(["env/*.h"]) 
+    + glob(["file/*.h"])
+    + glob(["hdfs/*.h"])
+    + glob(["logging/*.h"])
+    + glob(["memory/*.h"])
+    + glob(["memtable/*.h"])
+    + glob(["monitoring/*.h"])
+    + glob(["options/*.h"])
+    + glob(["table/**/*.h"])
+    + glob(["test_util/*.h"])
+    + glob(["trace_replay/*.h"])
+    + glob(["util/*.h"], exclude = [
+        "util/crc32c_ppc.h",
+        "util/crc32c_ppc_constants.h",
+      ]) 
+    + select({
+        "@platforms//cpu:arm64": [],
+        "@platforms//cpu:ppc": [
+            "util/crc32c_ppc.h",
+            "util/crc32c_ppc_constants.h",
+        ],
+        "//conditions:default": [],        
+    })
+    + glob(["utilities/**/*.h"]),
+    srcs = glob(["cache/*.cc"], exclude = ["cache/*_test.cc"] + ["cache/*_bench.cc"])
+    + glob(["db/**/*.cc"], exclude = ["db/**/*_test.cc"] + ["db/**/*_bench.cc"] + ["db/db_test_util.cc", "db/db_test2.cc"])
+    + glob(["env/*.cc"], exclude = ["env/*_test.cc"])
+    + glob(["file/*.cc"], exclude = ["file/*_test.cc"])
+    + glob(["logging/*.cc"], exclude = ["logging/*_test.cc"])
+    + glob(["memory/*.cc"], exclude = ["memory/*_test.cc"])
+    + glob(["memtable/*.cc"], exclude = ["memtable/*_test.cc"] + ["memtable/*_bench.cc"])
+    + glob(["monitoring/*.cc"], exclude = ["monitoring/*_test.cc"])
+    + glob(["options/*.cc"], exclude = ["options/*_test.cc"])
+    + ["port/stack_trace.cc"] 
+    + select({
+        "@platforms//os:windows": glob(["port/win/*.cc"]),
+        "//conditions:default": [
+            "port/port_posix.cc",
+        ],
+    })
+    + glob(["table/**/*.cc"], exclude = ["table/**/*_test.cc"] + ["table/**/*_bench.cc"])
+    + glob(["test_util/*.cc"], exclude = ["test_util/*_test.cc"])
+    + ["tools/dump/db_dump_tool.cc"]
+    + glob(["trace_replay/*.cc"], exclude = ["trace_replay/*_test.cc"])
+    + glob(["util/*.cc"], exclude = ["util/*_test.cc"] + ["util/*_bench.cc"])
+    + glob(["utilities/**/*.cc"], exclude = ["utilities/**/*_test.cc"] + ["utilities/**/*_bench.cc"] 
+    + ["utilities/env_librados.cc"])
+    ,
+    defines = [
+        "OS_LINUX",
+        "ROCKSDB_PLATFORM_POSIX",
+        "ROCKSDB_SUPPORT_THREAD_LOCAL",
+        "ROCKSDB_FALLOCATE_PRESENT",
+        "ROCKSDB_JEMALLOC",
+        "ROCKSDB_LIB_IO_POSIX",
+        "ROCKSDB_MALLOC_USABLE_SIZE",
+        "ROCKSDB_USE_RTTI",
+    ],
+    deps = [
+        ":api",
+        ":folly",
+        "@com_github_jemalloc_jemalloc//:jemalloc",
+    ],
+    linkopts = ["-ldl"],
+    visibility = ["//visibility:public"],
+)
+
+cc_test(
+    name = "cache_test",
+    srcs = [
+        "cache/cache_test.cc",
+    ],
+    deps = [
+        ":rocksdb",
+        "@com_google_googletest//:gtest_main",
+    ],
+    linkopts = ["-ldl"],
+)
+
+cc_test(
+    name = "random_access_file_reader_test",
+    srcs = [
+        "file/random_access_file_reader_test.cc",
+    ],
+    deps = [
+        ":rocksdb",
+        "@com_google_googletest//:gtest_main",
+    ],
+)
+
+cc_test(
+    name = "bloom_test",
+    deps = [":rocksdb",],
+    srcs = ["util/bloom_test.cc"],
+)
+
+cc_test(
+    name = "coding_test",
+    srcs = ["util/coding_test.cc"],
+    deps = [":rocksdb"],
+)
+
+cc_library(
+    name = "rocksdb_test_library",
+    srcs = [
+        "db/db_test_util.cc",
+        "test_util/mock_time_env.cc",                                 
+        "test_util/testharness.cc",                                  
+        "test_util/testutil.cc",                        
+        "utilities/cassandra/test_utils.cc",
+    ],
+    deps = [":rocksdb",],
+    visibility = ["//visibility:public"],
+)
+
+cc_binary(
+    name = "db_stress",
+    srcs = [
+        "db_stress_tool/db_stress.cc",
+    ],
+    deps = [":rocksdb",],
+)
+
+cc_binary(
+    name = "blob_dump",
+    srcs = ["tools/blob_dump.cc",],
+    deps = [":rocksdb",],
+)
+
+cc_binary(
+    name = "block_cache_trace_analyzer_tool",
+    srcs = ["tools/block_cache_analyzer/block_cache_trace_analyzer_tool.cc",],
+    deps = [":rocksdb"],
+)
+
+cc_binary(
+    name = "db_repl_stress",
+    srcs = ["tools/db_repl_stress.cc",],
+    deps = [":rocksdb"],
+)
+
+cc_binary(
+    name = "db_sanity_test",
+    srcs = ["tools/db_sanity_test.cc",],
+    deps = [":rocksdb"],
+)
+
+cc_library(
+    name = "ldb_tool_library",
+    hdrs = [
+        "tools/ldb_cmd_impl.h",
+    ],
+    srcs = [
+        "tools/ldb_cmd.cc",
+        "tools/ldb_tool.cc",
+    ],
+    deps = [
+        ":rocksdb"
+    ],
+)
+
+cc_binary(
+    name = "ldb",
+    srcs = [
+        "tools/ldb.cc",
+    ],
+    deps = [":ldb_tool_library"],
+)
+
+cc_binary(
+    name = "io_tracer_parser",
+    srcs = ["tools/io_tracer_parser.cc",],
+    deps = [":rocksdb"],
+)
+
+cc_binary(
+    name = "sst_dump",
+    srcs = [
+        "tools/sst_dump.cc",
+        "tools/sst_dump_tool.cc",
+    ],
+    deps = [":ldb_tool_library"],
+)
+
+cc_binary(
+    name = "write_stress",
+    srcs = ["tools/write_stress.cc",],
+    deps = [":rocksdb"],
+)
+
+cc_binary(
+    name = "rocksdb_dump",
+    srcs = ["tools/dump/rocksdb_dump.cc", ],
+    deps = [":rocksdb"],
+)
+
+cc_binary(
+    name = "rocksdb_undump",
+    srcs = ["tools/dump/rocksdb_undump.cc", ],
+    deps = [":rocksdb"],
+)
+
+cc_binary(
+    name = "trace_analyzer",
+    srcs = ["tools/trace_analyzer.cc",],
+    deps = [":rocksdb"],
+)
+
+cc_binary(
+    name = "io_tracer_parser_tool",
+    srcs = ["tools/io_tracer_parser_tool.cc",],
+    deps = [":rocksdb"],
+)
+
+cc_test(
+    name = "rate_limiter_test",
+    srcs = [
+        "util/rate_limiter_test.cc",
+    ],
+    deps = [":rocksdb_test_library",],
+)
+
+cc_test(
+    name = "repeatable_thread_test",
+    srcs = ["util/repeatable_thread_test.cc",],
+    deps = [":rocksdb",],
+)
+
+cc_test(
+    name = "hash_test",
+    srcs = [
+        "util/hash_test.cc",
+    ],
+    deps = [":rocksdb"],
+)
+
+cc_test(
+    name = "ribbon_test",
+    srcs = ["util/ribbon_test.cc",],
+    deps = [":rocksdb",],
+)
+
+cc_test(
+    name = "slice_test",
+    srcs = [
+        "util/slice_test.cc",
+    ],
+    deps = [
+        ":rocksdb",
+    ],
+)
+
+cc_test(
+    name = "slice_transform_test",
+    srcs = ["util/slice_transform_test.cc",],
+    deps = [":rocksdb",],
+)
+
+cc_test(
+    name = "thread_list_test",
+    srcs = ["util/thread_list_test.cc"],
+    deps = [":rocksdb"],
+)
+
+cc_test(
+    name = "thread_local_test",
+    srcs = ["util/thread_local_test.cc",],
+    deps = [":rocksdb"],
+)
+
+cc_test(
+    name = "timer_test",
+    srcs = ["util/timer_test.cc"],
+    deps = [":rocksdb"],
+)
+
+cc_test(
+    name = "timer_queue_test",
+    deps = [":rocksdb"],
+    srcs = [
+        "util/timer_queue_test.cc"
+    ],
+)
+
+cc_test(
+    name = "work_queue_test",
+    srcs = [
+        "util/work_queue_test.cc",
+    ],
+    deps = [
+        ":rocksdb",
+    ],
+)
+
+cc_binary(
+    name = "simple_example",
+    deps = [
+        ":rocksdb",
+    ],
+    srcs = [
+        "examples/simple_example.cc",
+    ],
+)

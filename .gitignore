@@ -95,3 +95,9 @@ fuzz/proto/gen/
 fuzz/crash-*
 
 cmake-build-*
+
+.cache
+bazel-bin
+bazel-out
+bazel-rocksdb
+bazel-testlogs
