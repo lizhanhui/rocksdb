@@ -48,11 +48,11 @@ function expand_build_version() {
     echo "GIT SHA: $git_sha"
 	git_tag=$(git symbolic-ref -q --short HEAD 2> /dev/null || git describe --tags --exact-match 2>/dev/null)
     echo "GIT TAG: $git_tag"
-	git_mod=0 #$(git diff-index HEAD --quiet 2>/dev/null; echo $$?)
+	git_mod=$(git diff-index HEAD --quiet 2>/dev/null; echo $$?)
     echo "GIT MOD: $git_mod"
 	git_date=$(git log -1 --date=format:"%Y-%m-%d %T" --format="%ad" 2>/dev/null)
     echo "GIT Date: $git_date"
     sed -e s/@GIT_SHA@/"$git_sha"/ -e s/@GIT_TAG@/"$git_tag"/ -e s/@GIT_MOD@/"$git_mod"/ -e s/@BUILD_DATE@/"$build_date"/ -e s/@GIT_DATE@/"$git_date"/ util/build_version.cc.in | tee util/build_version.cc
 }
 
-expand_build_version
+# expand_build_version

@@ -1,4 +1,5 @@
 load("@rules_cc//cc:defs.bzl", "cc_library", "cc_binary", "cc_test")
+load("@com_github_facebook_rocksdb//bazel:expand_build_version.bzl", "expand_build_version")
 licenses(["notice"])
 
 cc_library(
@@ -6,6 +7,16 @@ cc_library(
     hdrs = glob(["include/rocksdb/**/*.h"]),
     strip_include_prefix = "//include",
     visibility = ["//visibility:public"],
+)
+
+expand_build_version(
+    name = "build_version",
+    build_date = "2022-01-09 19:46:50",
+    git_sha = "d08a913361e53dfd33fe2f81f598157d9f3fcede",
+    git_tag = "v6.28.0-bazel",
+    git_mod = "0",
+    git_date = "2022-01-09 18:33:04", 
+    template_file = "util/build_version.cc.in",
 )
 
 cc_library(
@@ -73,6 +84,7 @@ cc_library(
     + ["tools/dump/db_dump_tool.cc"]
     + glob(["trace_replay/*.cc"], exclude = ["trace_replay/*_test.cc"])
     + glob(["util/*.cc"], exclude = ["util/*_test.cc"] + ["util/*_bench.cc"])
+    + [":build_version"]
     + glob(["utilities/**/*.cc"], exclude = ["utilities/**/*_test.cc"] + ["utilities/**/*_bench.cc"] 
     + ["utilities/env_librados.cc"])
     ,
