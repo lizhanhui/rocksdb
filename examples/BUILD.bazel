@@ -1,0 +1,82 @@
+load("@rules_cc//cc:defs.bzl", "cc_binary")
+
+cc_binary(
+    name = "c_simple_example",
+    srcs = [
+        "c_simple_example.c",
+    ],
+    deps = ["//:rocksdb",],
+)
+
+cc_binary(
+    name = "column_families_example",
+    srcs = [
+        "column_families_example.cc",
+    ],
+    deps = ["//:rocksdb",],
+)
+
+cc_binary(
+    name = "compact_files_example",
+    deps = ["//:rocksdb",],
+    srcs = [
+        "compact_files_example.cc",
+    ],
+)
+
+cc_binary(
+    name = "compaction_filter_example",
+    deps = [
+        "//:rocksdb",
+    ],
+    srcs = [
+        "compaction_filter_example.cc",
+    ],
+)
+
+cc_binary(
+    name = "multi_processes_example",
+    srcs = [
+        "multi_processes_example.cc",
+    ],
+    deps = ["//:rocksdb"],
+)
+
+cc_binary(
+    name = "optimistic_transaction_exmaple",
+    deps = ["//:rocksdb",],
+    srcs = [
+        "optimistic_transaction_example.cc",
+    ],
+)
+
+cc_binary(
+    name = "option_file_example",
+    deps = ["//:rocksdb",],
+    srcs = [
+        "options_file_example.cc",
+    ],
+    data = [
+        "rocksdb_option_file_example.ini",
+    ],
+)
+
+cc_binary(
+    name = "simple_example",
+    deps = [
+        "//:rocksdb",
+    ],
+    srcs = [
+        "simple_example.cc",
+    ],
+)
+
+cc_binary(
+    name = "transaction_example",
+    srcs = [
+        "transaction_example.cc",
+    ],
+    deps = [
+        "//:rocksdb", 
+    ],
+)

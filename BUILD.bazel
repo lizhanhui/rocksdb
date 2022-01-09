@@ -1,3 +1,4 @@
+load("@rules_cc//cc:defs.bzl", "cc_library", "cc_binary", "cc_test")
 licenses(["notice"])
 
 cc_library(
@@ -318,15 +319,5 @@ cc_test(
     ],
     deps = [
         ":rocksdb",
-    ],
-)
-
-cc_binary(
-    name = "simple_example",
-    deps = [
-        ":rocksdb",
-    ],
-    srcs = [
-        "examples/simple_example.cc",
     ],
 )
