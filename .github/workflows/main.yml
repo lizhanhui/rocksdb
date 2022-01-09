@@ -34,16 +34,7 @@ jobs:
         run: bazel -h
       - name: Compile All Targets
         run: |
-          bazel build \
-            --config=remote \
-            --remote_header=x-buildbuddy-api-key=${{ secrets.BUILDBUDDY_ORG_API_KEY }} \
-            --jobs=200 \
-            //... 
+          bazel build //...
       - name: Run Unit Tests
         run: |
-          bazel test \
-            --test_output=errors \
-            --config=remote \
-            --remote_header=x-buildbuddy-api-key=${{ secrets.BUILDBUDDY_ORG_API_KEY }} \
-            --jobs=50 \
-            //...
+          bazel test --test_output=errors //...
