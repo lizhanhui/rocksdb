@@ -81,7 +81,7 @@ cc_library(
         "ROCKSDB_PLATFORM_POSIX",
         "ROCKSDB_SUPPORT_THREAD_LOCAL",
         "ROCKSDB_FALLOCATE_PRESENT",
-        "ROCKSDB_JEMALLOC",
+        # "ROCKSDB_JEMALLOC",
         "ROCKSDB_LIB_IO_POSIX",
         "ROCKSDB_MALLOC_USABLE_SIZE",
         "ROCKSDB_USE_RTTI",
@@ -89,7 +89,7 @@ cc_library(
     deps = [
         ":api",
         ":folly",
-        "@com_github_jemalloc_jemalloc//:jemalloc",
+        # "@com_github_jemalloc_jemalloc//:jemalloc",
     ],
     linkopts = ["-ldl"],
     visibility = ["//visibility:public"],
