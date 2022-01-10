@@ -6,7 +6,10 @@ def rocksdb_deps():
         http_archive,
         name = "com_github_jemalloc_jemalloc",
         sha256 = "ed51b0b37098af4ca6ed31c22324635263f8ad6471889e0592a9c0dba9136aea",
-        url = "https://github.com/jemalloc/jemalloc/archive/refs/tags/5.2.1.tar.gz",
+        urls = [
+            "https://shutian.oss-cn-hangzhou.aliyuncs.com/cdn/jemalloc/jemalloc-5.2.1.tar.gz",
+            "https://github.com/jemalloc/jemalloc/archive/refs/tags/5.2.1.tar.gz",
+        ],
         strip_prefix = "jemalloc-5.2.1",
         build_file = "@com_github_facebook_rocksdb//bazel:jemalloc.BUILD",
     )
@@ -14,11 +17,12 @@ def rocksdb_deps():
     maybe(
         http_archive,
         name = "rules_foreign_cc",
-        sha256 = "1df78c7d7eed2dc21b8b325a2853c31933a81e7b780f9a59a5d078be9008b13a",
+        sha256 = "bcd0c5f46a49b85b384906daae41d277b3dc0ff27c7c752cc51e43048a58ec83",
+        strip_prefix = "rules_foreign_cc-0.7.1",
         urls = [
-            "https://github.com/bazelbuild/rules_foreign_cc/archive/refs/tags/0.7.0.tar.gz",
+            "https://shutian.oss-cn-hangzhou.aliyuncs.com/cdn/rules_foreign_cc/rules_foreign_cc-0.7.1.tar.gz",
+            "https://github.com/bazelbuild/rules_foreign_cc/archive/0.7.1.tar.gz",
         ],
-        strip_prefix = "rules_foreign_cc-0.7.0",
     )
 
     maybe(
@@ -48,6 +52,7 @@ def rocksdb_deps():
     maybe(
         http_archive,
         name = "com_github_facebook_zstd",
+        sha256 = "dc05773342b28f11658604381afd22cb0a13e8ba17ff2bd7516df377060c18dd",
         urls = [
             "https://shutian.oss-cn-hangzhou.aliyuncs.com/cdn/zstd/zstd-1.5.1.tar.gz",
             "https://github.com/facebook/zstd/archive/refs/tags/v1.5.1.tar.gz",
@@ -62,6 +67,7 @@ def rocksdb_deps():
         strip_prefix = "gflags-2.2.2",
         sha256 = "34af2f15cf7367513b352bdcd2493ab14ce43692d2dcd9dfc499492966c64dcf",
         urls = [
+            "https://shutian.oss-cn-hangzhou.aliyuncs.com/cdn/gflags/gflags-2.2.2.tar.gz",
             "https://github.com/gflags/gflags/archive/refs/tags/v2.2.2.tar.gz",
         ],
     )
@@ -72,14 +78,18 @@ def rocksdb_deps():
         strip_prefix = "glog-0.5.0",
         sha256 = "eede71f28371bf39aa69b45de23b329d37214016e2055269b3b5e7cfd40b59f5",
         urls = [
-            "https://github.com/google/glog/archive/refs/tags/v0.5.0.tar.gz"
+            "https://shutian.oss-cn-hangzhou.aliyuncs.com/cdn/glog/glog-0.5.0.tar.gz",
+            "https://github.com/google/glog/archive/refs/tags/v0.5.0.tar.gz",
         ],
     )
 
     maybe(
         http_archive,
         name = "com_google_googletest",
-        urls = ["https://github.com/google/googletest/archive/refs/tags/release-1.11.0.tar.gz"],
+        urls = [
+            "https://shutian.oss-cn-hangzhou.aliyuncs.com/cdn/googletest/googletest-release-1.11.0.tar.gz",
+            "https://github.com/google/googletest/archive/refs/tags/release-1.11.0.tar.gz",
+        ],
         strip_prefix = "googletest-release-1.11.0",
         sha256 = "b4870bf121ff7795ba20d20bcdd8627b8e088f2d1dab299a031c1034eddc93d5",
     )
