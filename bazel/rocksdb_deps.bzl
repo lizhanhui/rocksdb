@@ -24,11 +24,36 @@ def rocksdb_deps():
     maybe(
         http_archive,
         name = "com_github_madler_zlib",
+        sha256 = "629380c90a77b964d896ed37163f5c3a34f6e6d897311f1df2a7016355c45eff",
         urls = [
+            "https://shutian.oss-cn-hangzhou.aliyuncs.com/cdn/zlib/zlib-1.2.11.tar.gz",
             "https://github.com/madler/zlib/archive/refs/tags/v1.2.11.tar.gz",
         ],
         strip_prefix = "zlib-1.2.11",
         build_file = "@com_github_facebook_rocksdb//bazel:zlib.BUILD",
+    )
+
+    maybe(
+        http_archive,
+        name = "com_github_lz4_lz4",
+        sha256 = "030644df4611007ff7dc962d981f390361e6c97a34e5cbc393ddfbe019ffe2c1",
+        urls = [
+            "https://shutian.oss-cn-hangzhou.aliyuncs.com/cdn/lz4/lz4-1.9.3.tar.gz",
+            "https://github.com/lz4/lz4/archive/refs/tags/v1.9.3.tar.gz",
+        ],
+        strip_prefix = "lz4-1.9.3",
+        build_file = "@com_github_facebook_rocksdb//bazel:lz4.BUILD",
+    )
+
+    maybe(
+        http_archive,
+        name = "com_github_facebook_zstd",
+        urls = [
+            "https://shutian.oss-cn-hangzhou.aliyuncs.com/cdn/zstd/zstd-1.5.1.tar.gz",
+            "https://github.com/facebook/zstd/archive/refs/tags/v1.5.1.tar.gz",
+        ],
+        strip_prefix = "zstd-1.5.1",
+        build_file = "@com_github_facebook_rocksdb//bazel:zstd.BUILD",
     )
 
     maybe(
@@ -66,7 +91,6 @@ def rocksdb_deps():
         strip_prefix = "snappy-ed3b7b242bd24de2ca6750c73f64bee5b7505944",
         sha256 = "88a644b224f54edcd57d01074c2d6fd6858888e915c21344b8622c133c35a337",
         build_file = "@com_github_facebook_rocksdb//bazel:snappy.BUILD",
-
     )
 
     maybe(

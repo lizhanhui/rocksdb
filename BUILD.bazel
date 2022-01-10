@@ -1,6 +1,19 @@
 load("@rules_cc//cc:defs.bzl", "cc_library", "cc_binary", "cc_test")
+load("@rules_foreign_cc//foreign_cc:defs.bzl", "make")
 load("@com_github_facebook_rocksdb//bazel:expand_build_version.bzl", "expand_build_version")
 licenses(["notice"])
+
+make(
+    name = "lz4",
+    lib_source = "@com_github_lz4_lz4//:all_srcs",
+    out_static_libs = ["liblz4.a"],
+)
+
+make(
+    name = "zstd",
+    lib_source = "@com_github_facebook_zstd//:all_srcs",
+    out_static_libs = ["libzstd.a"],
+)
 
 cc_library(
     name = "api",
@@ -101,7 +114,11 @@ cc_library(
     deps = [
         ":api",
         ":folly",
+        ":lz4",
+        ":zstd",
         "@com_github_jemalloc_jemalloc//:jemalloc",
+        "@com_github_madler_zlib//:zlib",
+        "@com_github_google_snappy//:snappy",
     ],
     linkopts = ["-ldl"],
     visibility = ["//visibility:public"],
