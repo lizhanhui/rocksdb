@@ -110,6 +110,10 @@ cc_library(
         "ROCKSDB_LIB_IO_POSIX",
         "ROCKSDB_MALLOC_USABLE_SIZE",
         "ROCKSDB_USE_RTTI",
+        "ZLIB",
+        "SNAPPY",
+        "ZSTD",
+        "LZ4"
     ],
     deps = [
         ":api",
