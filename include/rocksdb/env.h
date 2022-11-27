@@ -592,6 +592,12 @@ class Env {
   // could be a fully implemented one, or a wrapper class around the Env
   const std::shared_ptr<SystemClock>& GetSystemClock() const;
 
+  // Get/Set CPU-set, on which RocksDB threads are allowed to schedule.
+  virtual const std::vector<int>& GetCpuSet() const { return cpu_set_; }
+  virtual void SetCpuSet(std::vector<int> cpu_set) {
+    this->cpu_set_.swap(cpu_set);
+  }
+
   // If you're adding methods here, remember to add them to EnvWrapper too.
 
  protected:
@@ -604,6 +610,8 @@ class Env {
 
   // Pointer to the underlying SystemClock implementation
   std::shared_ptr<SystemClock> system_clock_;
+
+  std::vector<int> cpu_set_;
 
  private:
   static const size_t kMaxHostNameLen = 256;
@@ -1512,6 +1520,13 @@ class EnvWrapper : public Env {
   }
   void SanitizeEnvOptions(EnvOptions* env_opts) const override {
     target_->SanitizeEnvOptions(env_opts);
+  }
+
+  const std::vector<int>& GetCpuSet() const override {
+    return target_->GetCpuSet();
+  }
+  void SetCpuSet(std::vector<int> cpu_set) override {
+    target_->SetCpuSet(cpu_set);
   }
 
  private:

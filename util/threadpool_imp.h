@@ -14,6 +14,10 @@
 #include <memory>
 #include <functional>
 
+#ifdef _GNU_SOURCE
+#include <pthread.h>
+#endif
+
 namespace ROCKSDB_NAMESPACE {
 
 class ThreadPoolImpl : public ThreadPool {
@@ -87,6 +91,10 @@ class ThreadPoolImpl : public ThreadPool {
 
   // Set the thread priority.
   void SetThreadPriority(Env::Priority priority);
+
+#ifdef _GNU_SOURCE
+  void SetCpuSet(cpu_set_t* cpu_set);
+#endif
 
   static void PthreadCall(const char* label, int result);
 
