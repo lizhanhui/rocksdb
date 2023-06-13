@@ -1,7 +1,7 @@
 #!/bin/bash
 BASEDIR=$(dirname "$0")
 cd "$BASEDIR/.." || exit 1
-make shared_lib -j $(nproc) || exit 1
+PORTABLE=1 make shared_lib -j $(nproc) || exit 1
 cp --no-dereference --preserve=links librocksdb.so* dist/rocksdb/usr/local/lib/
 cp -r include/rocksdb dist/rocksdb/usr/local/include/
 cd dist
