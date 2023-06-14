@@ -8,4 +8,4 @@ cd dist
 strip -g rocksdb/usr/local/lib/librocksdb.so
 rm rocksdb/usr/local/lib/.gitignore
 rm rocksdb/usr/local/include/.gitignore
-dpkg-deb -b rocksdb
+dpkg-deb -Zxz -b rocksdb
